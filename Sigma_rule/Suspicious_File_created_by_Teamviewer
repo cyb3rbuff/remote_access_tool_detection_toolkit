@@ -1,0 +1,33 @@
+title: 'Suspicious File created by Teamviewer process'
+description: 'Triggers when Teamviewer create an executable or script file remotely downloaded via a transfer session'
+logsource:
+    product: EDR
+author: ETIENNE Vincent & WIDNER Lauren
+detection:
+    selection_susp_file:
+        - FileCreated|endswith:
+            - '.exe'
+            - '.dll'
+            - '.scr'
+            - '.com'
+            - '.bat'
+            - '.ps1'
+            - '.vb*'
+            - '.ws*'
+            - '.hta'
+            - '.cmd'
+            - '.reg'
+            - '.py'
+            - '.sh'
+            - '.pl'
+            - '.rb'
+            - '.lua'
+            - '.bin'
+            - '.cpl'
+    selection_process:
+        - Image|endswith: 'teamviewer*.exe'
+        - signature: 'TeamViewer Germany GmbH'
+        - dns_query|endswith: '.teamviewer.com'
+    selection_file_signed:
+        - FileCreated.IsSigned: 'true'    
+    condition: selection_process and selection_susp_file and not selection_file_signed
