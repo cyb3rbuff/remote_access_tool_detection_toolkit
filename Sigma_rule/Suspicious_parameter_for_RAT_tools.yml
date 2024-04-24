@@ -1,0 +1,27 @@
+title: "Installation of Anydesk, Teamviewer or NetSupport with suspicious parameter and/or a specific password"
+description: "Triggers when a list of RAT are installed with specific password, silent or proxy settings parameter, this could indicate suspicious activities."
+logsource:
+    product: EDR
+author: ETIENNE Vincent & WIDNER Lauren
+detection:
+    selection_list_of_RAT:
+        - Image|endswith:
+            - 'anydesk*.exe'
+            - 'teamviewer*.exe'
+        - dns_query|endswith:
+            - '.anydesk.com'
+            - '.teamviewer.com'
+            - '.netsupportsoftware.com'
+        - signature:
+            - 'Anydesk Software GmBH'
+            - 'TeamViewer Germany GmbH'
+            - 'NetSupport Ltd'
+    selection_susp_parameter:
+        - CommandLine|contains:
+            - 'password'
+            - 'silent'
+            - 'proxy'
+            - 'grant-easy-access' #Only for teamviewer, allow to access without asking the client
+    condition: all of selection_*
+falsepositives:
+    - Not known process in the organization or dns query done from browser process
