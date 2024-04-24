@@ -1,0 +1,33 @@
+title: "Suspicious child process from Anydesk"
+description: "Triggers when Anydesk spawn suspicious process, which could indicate suspicious activities."
+logsource:
+    product: EDR
+author: ETIENNE Vincent & WIDNER Lauren
+detection:
+    selection_anydesk:
+        - ParentImage|endswith: 'anydesk*.exe'
+        - dns_query|endswith: '.anydesk.com'
+        - signature: 'Anydesk Software GmBH'
+    selection_susp_child:
+        - Image|endswith:
+            - '\ipconfig.exe'
+            - '\whoami.exe'
+            - '\cmd.exe'
+            - '\powershell*.exe'
+            - '\net.exe'
+            - '\schtasks.exe'
+            - '\sc.exe'
+            - '\rundll32.exe'
+            - '\msiexec.exe'
+            - '\mshta.exe'
+            - '\bitsadmin.exe'
+            - '\certreq.exe'
+            - '\wscript.exe'
+            - '\cscript.exe'
+            - '\curl.exe'
+            - '\ssh.exe'
+            - '\scp.exe'
+            - '\wevtutil.exe'
+            - '\wget.exe'
+            - '\wmic.exe'
+    condition: all of selection_*
