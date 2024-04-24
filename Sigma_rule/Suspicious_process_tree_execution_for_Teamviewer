@@ -1,0 +1,26 @@
+title: Suspicious process tree execution for Teamviewer
+description: Triggers when Teamviewer is spawned from an abnormal parent process, which could           indicate suspicious activities.
+logsource:
+    product: EDR
+author: ETIENNE Vincent & WIDNER Lauren
+detection:
+    selection_susp_parent:
+        - ParentImage|endswith:
+            - '\msedge.exe'
+            - '\chrome.exe'
+            - '\firefox.exe'
+            - '\cmd.exe'
+            - '\powershell*.exe'
+            - '\rundll32.exe'
+            - '\mshta.exe'
+            - '\bitsadmin.exe'
+            - '\wscript.exe'
+            - '\cscript.exe'
+            - '\wmic.exe'
+    selection_process:
+        - Image|endswith: 'teamviewer*.exe'
+        - signature: 'TeamViewer Germany GmbH'
+        - dns_query|endswith: '.teamviewer.com'
+    condition: all of selection_*
+    falsepositives:
+        - Out of process installation or execution
