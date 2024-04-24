@@ -1,0 +1,15 @@
+title: "Probably rename Teamviewer process"
+description: "Triggers when a process is having characteristics of TeamViewer but with a different name"
+logsource:
+    product: EDR
+author: ETIENNE Vincent & WIDNER Lauren
+detection:
+    selection_image:
+        - Image|endswith:
+            - '\teamviewer*.exe'
+    selection_characteristics:
+        - signature: 'TeamViewer Germany GmbH'
+        - dns_query|endswith: '.teamviewer.com'
+    condition: selection_characteristics and not selection_image
+falsepositives:
+   - Not known process or dns query done from browser process
