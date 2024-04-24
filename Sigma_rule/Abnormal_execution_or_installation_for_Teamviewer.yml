@@ -2,6 +2,7 @@ title: "Out of standard processus of execution/installation for Teamviewer"
 description: "Triggers when Teamviewer is spawned from a non-standard parent process, here we suppose you install Teamviewer from powershell script in your organization,another parent process could indicate suspicious activities. Ideally, it’s recommended to exclude only specific element from the powershell script you use to install Teamviewer on your organization and consider the rest suspicious"
 logsource:
     product: EDR
+author: ETIENNE Vincent & WIDNER Lauren
 detection:
     selection_normal_parent:
         - ParentImage|endswith:
